@@ -58,18 +58,80 @@ document.getElementById('next2').addEventListener('click', () => {
 // Actualiza los elementos de la lista
 // Actualiza los elementos de la tabla
 firebase.database().ref('pelis-series').on('value', (snapshot) => {
-  itemsList.innerHTML = ''; // Limpia el contenido previo
+  itemsList.innerHTML = ''; // Limpia la tabla principal
   snapshot.forEach(item => {
-    const data = item.val();
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${data.name}</td>
-      <td>${data.platform}</td>
-      <td>${data.duration}</td>
-    `;
-    itemsList.appendChild(row);
+      const data = item.val();
+      const key = item.key; // ID único de Firebase
+      if (!data.completed) { // Sólo muestra las no completadas
+          const row = document.createElement('tr');
+          row.innerHTML = `
+              <td>${data.name}</td>
+              <td>${data.platform}</td>
+              <td>${data.duration}</td>
+              <td>
+                  <button class="delete-button" data-id="${key}">Borrar</button>
+                  <button class="complete-button" data-id="${key}">Completar</button>
+              </td>
+          `;
+          itemsList.appendChild(row);
+      }
+  });
+
+  // Actualiza los botones después de reconstruir la tabla
+  document.querySelectorAll('.delete-button').forEach(button => {
+      button.addEventListener('click', (e) => {
+          const id = e.target.getAttribute('data-id');
+          firebase.database().ref(`pelis-series/${id}`).remove();
+      });
+  });
+
+  document.querySelectorAll('.complete-button').forEach(button => {
+      button.addEventListener('click', (e) => {
+          const id = e.target.getAttribute('data-id');
+          firebase.database().ref(`pelis-series/${id}`).update({ completed: true });
+      });
   });
 });
 
+
+const showCompletedButton = document.getElementById('showCompleted');
+const completedSection = document.getElementById('completed-section');
+const completedTable = document.getElementById('completed-table').querySelector('tbody');
+
+showCompletedButton.addEventListener('click', () => {
+    completedSection.classList.toggle('hidden');
+    firebase.database().ref('pelis-series').once('value', (snapshot) => {
+        completedTable.innerHTML = ''; // Limpia la tabla de completados
+        snapshot.forEach(item => {
+            const data = item.val();
+            if (data.completed) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${data.name}</td>
+                    <td>${data.platform}</td>
+                    <td>${data.duration}</td>
+                `;
+                completedTable.appendChild(row);
+            }
+        });
+    });
+});
+
+
+const closeWizard = document.getElementById('closeWizard');
+
+// Cerrar el wizard al pulsar el botón de cerrar
+closeWizard.addEventListener('click', () => {
+  wizard.classList.add('hidden');
+  document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
+});
+
+// Cerrar el wizard al pulsar ESC
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    wizard.classList.add('hidden');
+    document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
+  }
+});
 
 
