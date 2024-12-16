@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pelis/Series</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Pelis/Series</h1>
+    <button id="addBtn">Afegir Peli/Serie</button>
+    <div id="wizard" class="hidden">
+      <div class="wizard-overlay"></div>
+      <form id="wizardForm" class="wizard-content">
+        <div class="step hidden" id="step1">
+          <label for="name">Nom:</label>
+          <input type="text" id="name" placeholder="Introduce el nombre" required="">
+          <button type="button" id="next1">Siguiente</button>
+        </div>
+        <div class="step hidden" id="step2">
+          <label for="platform">Plataforma:</label>
+          <input type="text" id="platform" placeholder="Introduce la plataforma" required="">
+          <button type="button" id="next2">Siguiente</button>
+        </div>
+        <div class="step hidden" id="step3">
+          <label for="duration">Duració:</label>
+          <input type="text" id="duration" placeholder="Introduce la duración" required="">
+          <button type="submit">Guardar</button>
+        </div>
+      </form>
+    </div>
+    
+    
+    <div id="list">
+      <h2>Lista de Pelis/Series</h2>
+      <table id="items-table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Plataforma</th>
+            <th>Duració</th>
+          </tr>
+        </thead>
+        <tbody id="items"></tbody>
+      </table>
+    </div>
+    
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <script src="script.js"></script>
+  
+</body>
+</html>

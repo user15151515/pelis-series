@@ -1,0 +1,193 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  background-color: #ffefef;
+  position: relative;
+}
+
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  text-align: center;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+h1 {
+  color: #ff4081;
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #ff4081;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 8px;
+  margin: 10px 0;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #ff246d;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.hidden {
+  display: none;
+}
+
+#wizard.hidden {
+  display: none !important;
+}
+
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #ff4081;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1em;
+}
+
+
+/* Mejora del wizard */
+#wizard {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wizard-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.wizard-content {
+  position: relative;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.step {
+  text-align: center;
+}
+
+button {
+  transition: background-color 0.3s ease;
+}
+
+
+/* Estilos para la lista de elementos */
+ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  display: grid;
+  gap: 15px;
+}
+
+ul li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ff4081, #ff246d);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+ul li:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+ul li span {
+  font-size: 1.2em;
+  margin: 5px 0;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Cabeceras de la tabla */
+ul li:first-child {
+  background: #ffefef;
+  color: #ff4081;
+  font-weight: bold;
+  border: 1px solid #ff4081;
+  box-shadow: none;
+  cursor: default;
+}
+
+/* Estilos para la tabla */
+#items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 1em;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#items-table thead {
+  background-color: #ff4081;
+  color: white;
+}
+
+#items-table th, #items-table td {
+  padding: 15px;
+  border: 1px solid #ddd;
+}
+
+#items-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#items-table tr:hover {
+  background-color: #ffe4e6;
+  cursor: pointer;
+}
+
+#items-table th {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#items-table td {
+  color: #555;
+}
+
