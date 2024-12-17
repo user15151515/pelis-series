@@ -59,59 +59,62 @@ document.getElementById('next2').addEventListener('click', () => {
 // Actualiza los elementos de la tabla
 firebase.database().ref('pelis-series').on('value', (snapshot) => {
   itemsList.innerHTML = ''; // Limpia la tabla principal
+
   snapshot.forEach(item => {
       const data = item.val();
       const key = item.key; // ID único de Firebase
+
       if (!data.completed) { // Sólo muestra las no completadas
           const row = document.createElement('tr');
           row.innerHTML = `
-          <td>${data.name}</td>
-          <td>${data.platform}</td>
-          <td>${data.duration}</td>
+          <td class="editable-name">${data.name}</td>
+          <td class="editable-platform">${data.platform}</td>
+          <td class="editable-duration">${data.duration}</td>
           <td>
-              <button class="edit-button" data-id="${key}">
-                  <img src="imagenes/lapiz.png" alt="Editar" style="width: 16px; height: 16px;">
-              </button>
-              <button class="delete-button" data-id="${key}">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
-                      <path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"/>
-                  </svg>
-              </button>
-              <button class="complete-button" data-id="${key}">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
-                      <path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 21 7l-1.4-1.4z"/>
-                  </svg>
-              </button>
+
+            <button class="delete-button" data-id="${key}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
+                <path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"/>
+              </svg>
+            </button>
+            <button class="complete-button" data-id="${key}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
+                <path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 21 7l-1.4-1.4z"/>
+              </svg>
+            </button>
           </td>
-      `;
-      
-      
-      
+        `;
+        
           itemsList.appendChild(row);
+
+          // Asigna eventos dinámicos
+          row.querySelector('.delete-button').addEventListener('click', () => handleDelete(key, row));
+          row.querySelector('.complete-button').addEventListener('click', () => handleComplete(key, row));
       }
   });
 
-  // Actualiza los botones después de reconstruir la tabla
-  document.querySelectorAll('.delete-button').forEach(button => {
-    button.addEventListener('click', (e) => {
-        const id = e.currentTarget.getAttribute('data-id');
-
-        if (confirm("¿Estás seguro de que quieres borrar esta película/serie?")) {
-            // Eliminar la fila del DOM
-            const row = e.currentTarget.closest('tr');
-            row.remove();
-
-            // Eliminar el elemento de Firebase
-            firebase.database().ref(`pelis-series/${id}`).remove()
-                .then(() => {
-                    console.log("Elemento eliminado correctamente de Firebase.");
-                })
-                .catch((error) => {
-                    console.error("Error al eliminar el elemento:", error);
-                });
-        }
-    });
+    // Actualiza los botones después de reconstruir la tabla
+    document.querySelectorAll('.delete-button').forEach(button => {
+      button.addEventListener('click', (e) => {
+          const id = e.currentTarget.getAttribute('data-id');
+  
+          if (confirm("¿Estás seguro de que quieres borrar esta película/serie?")) {
+              // Eliminar la fila del DOM
+              const row = e.currentTarget.closest('tr');
+              row.remove();
+  
+              // Eliminar el elemento de Firebase
+              firebase.database().ref(`pelis-series/${id}`).remove()
+                  .then(() => {
+                      console.log("Elemento eliminado correctamente de Firebase.");
+                  })
+                  .catch((error) => {
+                      console.error("Error al eliminar el elemento:", error);
+                  });
+          }
+      });
 });
+
 
 
 
@@ -197,55 +200,6 @@ window.addEventListener('keydown', (e) => {
     wizard.classList.add('hidden');
     document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
   }
-});
-
-
-document.querySelectorAll('.edit-button').forEach(button => {
-  button.addEventListener('click', (e) => {
-      const id = e.currentTarget.getAttribute('data-id');
-      const row = e.currentTarget.closest('tr');
-
-      const editableCells = [
-          { cell: row.cells[0], key: 'name' },
-          { cell: row.cells[1], key: 'platform' },
-          { cell: row.cells[2], key: 'duration' }
-      ];
-
-      editableCells.forEach(({ cell, key }) => {
-          const originalValue = cell.textContent.trim();
-
-          // Crear input editable
-          const input = document.createElement('input');
-          input.type = "text";
-          input.value = originalValue;
-          input.classList.add('edit-input');
-          cell.innerHTML = ""; // Vaciar celda
-          cell.appendChild(input);
-
-          // Guardar cambios al perder foco o presionar Enter
-          const saveChanges = () => {
-              const newValue = input.value.trim();
-              if (newValue !== originalValue) {
-                  const updateData = {};
-                  updateData[key] = newValue;
-                  firebase.database().ref(`pelis-series/${id}`).update(updateData)
-                      .then(() => {
-                          cell.textContent = newValue;
-                      })
-                      .catch(error => console.error("Error al guardar cambios:", error));
-              } else {
-                  cell.textContent = originalValue;
-              }
-          };
-
-          input.addEventListener('blur', saveChanges);
-          input.addEventListener('keydown', (event) => {
-              if (event.key === 'Enter') input.blur();
-          });
-
-          input.focus(); // Enfocar el input
-      });
-  });
 });
 
 
