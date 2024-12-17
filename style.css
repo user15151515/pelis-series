@@ -195,6 +195,7 @@ ul li:first-child {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
+  background-color: #f9f9f9;
 }
 
 #items-table thead {
@@ -204,17 +205,13 @@ ul li:first-child {
 
 #items-table th, #items-table td {
   padding: 15px;
-  border: 1px solid #ddd;
 }
 
 #items-table tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-#items-table tr:hover {
-  background-color: #ffe4e6;
-  cursor: pointer;
-}
+
 
 #items-table th {
   font-weight: bold;
@@ -245,4 +242,97 @@ ul li:first-child {
 
 .close-button:hover {
   background: #ff246d;
+}
+
+button.delete-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+button.delete-button svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+button.delete-button:hover svg {
+  transform: scale(1.2);
+  opacity: 0.8;
+}
+
+button.edit-button {
+  background: none;
+  border: 2px;
+  padding: 0;
+  cursor: pointer;
+  scale: 75%;
+}
+
+button.edit-button img {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+button.edit-button:hover img {
+  transform: scale(1.2);
+  opacity: 0.8;
+}
+.edit-input {
+  width: 100%;
+  border: 2px dashed #ff4081;
+  background-color: transparent;
+  font-size: 1em;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+button.complete-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+button.complete-button svg {
+  width: 16px;
+  height: 16px;
+  fill: #4caf50; /* Color verde */
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+button.complete-button:hover svg {
+  transform: scale(1.2);
+  opacity: 0.8;
+}
+
+
+.edit-input {
+  width: 100%;
+  padding: 4px;
+  border: 2px dashed #ff4081;
+  background: transparent;
+  font-size: 1em;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+button.delete-completed {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+button.delete-completed svg {
+  width: 16px;
+  height: 16px;
+  fill: red;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+button.delete-completed:hover svg {
+  transform: scale(1.2);
+  opacity: 0.8;
 }
