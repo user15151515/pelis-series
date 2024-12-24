@@ -1,4 +1,10 @@
 /* Tipografía (opcional) */
+:root {
+  --rosaclaro: #ffefef;
+  --rosaoscuro: #ff4081 ;
+  --rosaoscurohover: #ff3075;
+}
+
 body {
   font-family: 'Poppins', Arial, sans-serif;
   margin: 0;
@@ -24,7 +30,7 @@ h1 {
 
 /* Botones generales */
 button {
-  background-color: #ff4081;
+  background-color: var(--rosaoscuro);
   color: white;
   border: none;
   padding: 12px 25px;
@@ -56,7 +62,7 @@ button:hover {
   left: 0;
   right: 0;
   width: 100%;
-  background-color: #ff4081;
+  background-color: var(--rosaoscuro);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -223,11 +229,11 @@ button:hover {
 
 /* Paso activo */
 .wizard-step.active .step-circle {
-  background-color: #ff4081;
+  background-color: var(--rosaoscuro);
   transform: scale(1.1);
 }
 .wizard-step.active .step-label {
-  color: #ff4081;
+  color: var(--rosaoscuro);
   font-weight: bold;
 }
 
@@ -261,7 +267,7 @@ button:hover {
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
-  color: #ff4081;
+  color: var(--rosaoscuro);
   text-align: center;
 
 }
@@ -298,7 +304,7 @@ label {
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
-  color: #ff4081;
+  color: var(--rosaoscuro);
 }
 
 input {
@@ -337,7 +343,7 @@ input {
 
 #items-table thead,
 #completed-table thead {
-  background: linear-gradient(135deg, #ff4081, #ff246d);
+  background-color: var(--rosaoscuro);
   color: white;
   text-transform: uppercase;
 }
