@@ -1,5 +1,6 @@
+/* Tipografía (opcional) */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', Arial, sans-serif;
   margin: 0;
   padding: 0;
   color: #333;
@@ -7,19 +8,21 @@ body {
   position: relative;
 }
 
+/* Contenedor principal */
 .container {
-  max-width: 600px;
-  margin: 50px auto;
+  max-width: 650px;
+  margin: 80px auto 50px auto;
   text-align: center;
   padding: 20px;
 }
 
 h1 {
   color: #ff4081;
-  font-size: 2em;
+  font-size: 2.2em;
   margin-bottom: 20px;
 }
 
+/* Botones generales */
 button {
   background-color: #ff4081;
   color: white;
@@ -30,60 +33,266 @@ button {
   border-radius: 8px;
   margin: 10px 0;
   transition: all 0.3s ease;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
 }
 
 button:hover {
-  background-color: #ff246d;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
+/* Icono + en el botón */
+.icon-plus {
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-right: 8px;
+}
+
+/* Menú principal */
 .main-menu {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   width: 100%;
-  background-color: #ff4081; /* Fondo claro */
+  background-color: #ff4081;
   display: flex;
-  align-items: center; /* Centra verticalmente los elementos */
-  justify-content: center; /* Centra horizontalmente los elementos */
-  padding: 10px 20px 10px 10px;
-  padding-right: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   z-index: 100;
 }
 
-/* Estilo del icono de casa */
 .home-icon {
-  width: 40px; /* Tamaño del ícono */
+  width: 40px;
   height: 40px;
-  margin-right: 10px; /* Espacio entre la casa y el resumen */
-  cursor: pointer; /* Cambia el cursor al pasar el ratón */
-  transition: transform 0.2s ease, opacity 0.2s ease; /* Animación suave */
-  vertical-align: middle; /* Alineación vertical al texto */
-
+  margin-right: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  vertical-align: middle;
 }
 
 .home-icon:hover {
-  transform: scale(1.1); /* Ampliar un poco al pasar el ratón */
-  opacity: 0.8; /* Suavizar el color al hacer hover */
+  transform: scale(1.1);
+  opacity: 0.8;
 }
 
-/* Contenedor para casa y resumen */
 .menu-content {
   display: flex;
-  align-items: center; /* Centra verticalmente casa y resumen */
+  align-items: center;
 }
 
+/* Wizard */
 .hidden {
-  display: none;
-}
-
-#wizard.hidden {
   display: none !important;
 }
 
+#wizard {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s forwards;
+  z-index: 999; /* Para que el wizard quede por encima de todo */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.wizard-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.wizard-content {
+  position: relative;
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  width: 90%;
+  max-width: 500px;
+  animation: scaleIn 0.3s forwards;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.8); }
+  to { transform: scale(1); }
+}
+
+
+/* Botón de cerrar (X) */
+.close-button {
+  position: absolute;
+  top: -10px;
+  right: 3px;
+  /* Quitar fondo y borde */
+  background: none;
+  border: none;
+  /* Color más sutil */
+  color: #999;
+  /* Tamaño de la “X” */
+  font-size: 1.4em;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s ease;
+  padding: 5px;
+}
+
+.close-button:hover {
+  color: #333; /* Se oscurece un poco al pasar el ratón */
+}
+
+
+
+/* Indicador de paso */
+.wizard-step-indicator {
+  font-size: 0.9em;
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.wizard-steps {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.wizard-steps::before {
+  content: '';
+  position: absolute;
+  top: 25px;  /* Ajustar para que pase por el centro de los círculos */
+  left: 8%;
+  width: 84%;
+  height: 2px;
+  background-color: #ccc;
+  z-index: -1;
+}
+
+
+.wizard-step {
+  text-align: center;
+  flex: 1; /* Reparte el ancho equitativamente */
+  position: relative;
+  cursor: default;
+}
+.wizard-step:not(:last-child) {
+  margin-right: 0px; /* Espacio entre pasos si fuera necesario */
+}
+
+
+
+/* Círculo del paso */
+.step-circle {
+  width: 40px;
+  height: 40px;
+  background-color: #ccc;
+  color: #fff;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px auto; 
+  font-size: 1em;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+/* Texto debajo del círculo */
+.step-label {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* Paso activo */
+.wizard-step.active .step-circle {
+  background-color: #ff4081;
+  transform: scale(1.1);
+}
+.wizard-step.active .step-label {
+  color: #ff4081;
+  font-weight: bold;
+}
+
+/* Paso completado */
+.wizard-step.completed .step-circle {
+  background-color: #4caf50;
+}
+
+/* Steps */
+.step-wrapper {
+  position: relative;
+  min-height: 180px; /* Espacio para que no salten los campos al cambiar de paso */
+}
+
+.step {
+  text-align: center;
+  width: 100%;
+  /* Activamos flexbox */
+  display: flex;
+  /* Disposición en columna */
+  flex-direction: column;
+  /* Centrar horizontalmente */
+  align-items: center;
+  /* Opcional: centrar verticalmente si quieres más espacio */
+  justify-content: center; 
+  /* Espaciado interno para que no queden tan pegados */
+  padding: 10px 0;
+}
+
+.step label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #ff4081;
+  text-align: center;
+
+}
+.step input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1em;
+  margin-top: 30px;
+  align-content: center;
+}
+
+/* Botones del wizard */
+.wizard-buttons {
+  display: flex;
+  justify-content: center; /* Centra los botones */
+  align-items: center;     /* Alinea verticalmente si hace falta */
+  gap: 300px;              /* Espacio entre botones */
+  margin-top: 20px;
+}
+
+/* Botón "Anterior" distinto, más gris */
+.prev-button {
+  background-color: #ddd;
+  color: #333;
+}
+.prev-button:hover {
+  background-color: #bbb;
+}
 
 label {
   display: block;
@@ -101,239 +310,165 @@ input {
   font-size: 1em;
 }
 
-
-/* Mejora del wizard */
-#wizard {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+/* Botones de wizard */
+.wizard-buttons {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 
-.wizard-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1;
+.prev-button {
+  background-color: #ccc;
+  color: #333;
 }
 
-.wizard-content {
-  position: relative;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-  z-index: 2;
-}
-
-.step {
-  text-align: center;
-}
-
-button {
-  transition: background-color 0.3s ease;
-}
-
-
-/* Estilos para la lista de elementos */
-ul {
-  padding: 0;
-  margin: 0;
-  list-style-type: none;
-  display: grid;
-  gap: 15px;
-}
-
-ul li {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #ff4081, #ff246d);
-  color: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-ul li:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-}
-
-ul li span {
-  font-size: 1.2em;
-  margin: 5px 0;
-  font-weight: bold;
-  text-align: center;
-}
-
-/* Cabeceras de la tabla */
-ul li:first-child {
-  background: #ffefef;
-  color: #ff4081;
-  font-weight: bold;
-  border: 1px solid #ff4081;
-  box-shadow: none;
-  cursor: default;
-}
-
-/* Estilos para la tabla */
-#items-table {
+/* Tablas */
+#items-table,
+#completed-table {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
   font-size: 1em;
   text-align: center;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
-  background-color: #f9f9f9;
+  background-color: white;
+  border-color: #333;
 }
 
-#items-table thead {
-  background-color: #ff4081;
+#items-table thead,
+#completed-table thead {
+  background: linear-gradient(135deg, #ff4081, #ff246d);
   color: white;
-}
-
-#items-table th, #items-table td {
-  padding: 15px;
-}
-
-#items-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-
-
-#items-table th {
-  font-weight: bold;
   text-transform: uppercase;
 }
 
-
-
-
-
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #ff4081;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  font-size: 1.2em;
-  text-align: center;
-  line-height: 30px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+#items-table th, #items-table td,
+#completed-table th, #completed-table td {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
 }
 
-.close-button:hover {
-  background: #ff246d;
+#items-table tr:hover,
+#completed-table tbody tr:hover {
+  background-color: rgba(255, 64, 129, 0.05);
 }
 
-button.delete-button {
-  background: none;
-  border-radius: 5px;
-  padding: 0;
-  cursor: pointer;
-}
-
-button.delete-button svg {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-button.delete-button:hover svg {
-  transform: scale(1.1);
-  opacity: 0.8;
-}
-
-button.edit-button {
-  background: none;
-  border: 2px;
-  padding: 0;
-  cursor: pointer;
-  scale: 75%;
-}
-
-button.edit-button img {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-button.edit-button:hover img {
-  transform: scale(1.1);
-  opacity: 0.8;
-}
-.edit-input {
-  width: 100%;
-  border: 2px dashed #ff4081;
-  background-color: transparent;
-  font-size: 1em;
-  padding: 4px;
-  box-sizing: border-box;
-}
-
-button.complete-button {
-  background: none;
-  border-radius: 5px;
-  padding: 0;
-  cursor: pointer;
-}
-
-button.complete-button svg {
-  width: 16px;
-  height: 16px;
-  fill: #4caf50; /* Color verde */
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-button.complete-button:hover svg {
-  transform: scale(1.1);
-  opacity: 0.8;
-}
-
-
-.edit-input {
-  width: 100%;
-  padding: 4px;
-  border: 2px dashed #ff4081;
-  background: transparent;
-  font-size: 1em;
-  box-sizing: border-box;
-  border-radius: 5px;
-}
-
-button.delete-completed {
+/* Botones de acción en la tabla */
+.delete-button, .complete-button, .delete-completed {
   background: none;
   border: none;
   cursor: pointer;
   padding: 5px;
 }
 
-button.delete-completed svg {
+.delete-button svg,
+.complete-button svg,
+.delete-completed svg {
   width: 16px;
   height: 16px;
-  fill: red;
+  fill: #333;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-button.delete-completed:hover svg {
-  transform: scale(1.1);
+.delete-button:hover svg { fill: red; }
+.complete-button:hover svg { fill: #4caf50; }
+.delete-completed:hover svg { fill: red; }
+
+.delete-button svg:hover,
+.complete-button svg:hover,
+.delete-completed svg:hover {
+  transform: scale(1.2);
   opacity: 0.8;
 }
+
+/* Sección completadas */
+#completed-section {
+  margin-top: 30px;
+}
+
+#completed-table tbody tr {
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+@media (max-width: 450px) {
+  /* Reducimos un poco el tamaño general del texto */
+  body {
+    font-size: 0.9em;
+  }
+
+  /* Contenedor principal: menos margen arriba/abajo */
+  .container {
+    max-width: 90%;      /* Para que se adapte mejor al ancho del móvil */
+    margin: 40px auto 30px auto;
+    padding: 10px;
+  }
+
+  /* Título algo más pequeño */
+  h1 {
+    font-size: 1.6em;    /* En lugar de 2.2em */
+    margin-bottom: 15px;
+  }
+
+  /* Botones: padding y fuente un poco más reducidos */
+  button {
+    padding: 8px 15px;
+    font-size: 0.9em;  
+    margin: 8px 0;
+  }
+  .icon-plus {
+    font-size: 1em;      /* Ícono + algo más reducido */
+    margin-right: 6px;
+  }
+
+  /* Menú principal: menos padding, ícono más pequeño */
+  .main-menu {
+    padding: 5px 10px;
+  }
+  .home-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+  }
+
+  /* Wizard: contenido más compacto */
+  .wizard-content {
+    padding: 20px;       /* En lugar de 30px */
+    max-width: 90%;      /* Ajustamos el ancho para pantallas muy pequeñas */
+  }
+
+  /* Botón de cierre (X) un poco más chico */
+  .close-button {
+    top: 0;              /* Ajusta si se descuadra la posición */
+    right: 5px;
+    font-size: 1.2em;
+  }
+
+  /* Cabecera de pasos: opcionalmente podemos reducir el size de los círculos */
+  .step-circle {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9em;
+  }
+
+  /* Inputs: padding y márgenes un poco menores */
+  .step input {
+    padding: 8px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+
+  /* Botones del wizard: reducir el gap para que quepan bien en móviles */
+  .wizard-buttons {
+    gap: 20px;           /* Antes ponías 300px; aquí quedaría mucho más pequeño */
+    margin-top: 15px;
+  }
+
+  /* Tablas: celdas más compactas */
+  #items-table th, #items-table td,
+  #completed-table th, #completed-table td {
+    padding: 10px;       /* En lugar de 15px */
+    font-size: 0.89em;
+
+  }
+}
+
