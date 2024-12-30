@@ -1,7 +1,7 @@
 /* Tipografía (opcional) */
 :root {
   --rosaclaro: #ffefef;
-  --rosaoscuro: #ff4081 ;
+  --rosaoscuro: #ff4081;
   --rosaoscurohover: #ff3075;
 }
 
@@ -23,7 +23,7 @@ body {
 }
 
 h1 {
-  color: #ff4081;
+  color: var(--rosaoscuro);
   font-size: 2.2em;
   margin-bottom: 20px;
 }
@@ -57,18 +57,17 @@ button:hover {
 
 /* Menú principal */
 .main-menu {
+  background-color: var(--rosaoscuro);
+  padding: 10px 0;
+  text-align: center;
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
   width: 100%;
-  background-color: var(--rosaoscuro);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 100;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  align-content: center;
 }
 
 .home-icon {
@@ -85,10 +84,7 @@ button:hover {
   opacity: 0.8;
 }
 
-.menu-content {
-  display: flex;
-  align-items: center;
-}
+
 
 /* Wizard */
 .hidden {
@@ -105,7 +101,7 @@ button:hover {
   align-items: center;
   justify-content: center;
   animation: fadeIn 0.3s forwards;
-  z-index: 999; /* Para que el wizard quede por encima de todo */
+  z-index: 999;
 }
 
 @keyframes fadeIn {
@@ -140,18 +136,14 @@ button:hover {
   to { transform: scale(1); }
 }
 
-
 /* Botón de cerrar (X) */
 .close-button {
   position: absolute;
   top: -10px;
   right: 3px;
-  /* Quitar fondo y borde */
   background: none;
   border: none;
-  /* Color más sutil */
   color: #999;
-  /* Tamaño de la “X” */
   font-size: 1.4em;
   cursor: pointer;
   line-height: 1;
@@ -160,10 +152,8 @@ button:hover {
 }
 
 .close-button:hover {
-  color: #333; /* Se oscurece un poco al pasar el ratón */
+  color: #333;
 }
-
-
 
 /* Indicador de paso */
 .wizard-step-indicator {
@@ -184,7 +174,7 @@ button:hover {
 .wizard-steps::before {
   content: '';
   position: absolute;
-  top: 25px;  /* Ajustar para que pase por el centro de los círculos */
+  top: 25px;
   left: 8%;
   width: 84%;
   height: 2px;
@@ -192,18 +182,16 @@ button:hover {
   z-index: -1;
 }
 
-
 .wizard-step {
   text-align: center;
-  flex: 1; /* Reparte el ancho equitativamente */
+  flex: 1;
   position: relative;
   cursor: default;
 }
+
 .wizard-step:not(:last-child) {
-  margin-right: 0px; /* Espacio entre pasos si fuera necesario */
+  margin-right: 0px;
 }
-
-
 
 /* Círculo del paso */
 .step-circle {
@@ -215,7 +203,7 @@ button:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 8px auto; 
+  margin: 0 auto 8px auto;
   font-size: 1em;
   transition: background-color 0.3s, transform 0.3s;
 }
@@ -232,6 +220,7 @@ button:hover {
   background-color: var(--rosaoscuro);
   transform: scale(1.1);
 }
+
 .wizard-step.active .step-label {
   color: var(--rosaoscuro);
   font-weight: bold;
@@ -245,21 +234,16 @@ button:hover {
 /* Steps */
 .step-wrapper {
   position: relative;
-  min-height: 180px; /* Espacio para que no salten los campos al cambiar de paso */
+  min-height: 180px;
 }
 
 .step {
   text-align: center;
   width: 100%;
-  /* Activamos flexbox */
   display: flex;
-  /* Disposición en columna */
   flex-direction: column;
-  /* Centrar horizontalmente */
   align-items: center;
-  /* Opcional: centrar verticalmente si quieres más espacio */
-  justify-content: center; 
-  /* Espaciado interno para que no queden tan pegados */
+  justify-content: center;
   padding: 10px 0;
 }
 
@@ -269,8 +253,8 @@ button:hover {
   font-weight: bold;
   color: var(--rosaoscuro);
   text-align: center;
-
 }
+
 .step input {
   width: 100%;
   padding: 10px;
@@ -285,9 +269,9 @@ button:hover {
 /* Botones del wizard */
 .wizard-buttons {
   display: flex;
-  justify-content: center; /* Centra los botones */
-  align-items: center;     /* Alinea verticalmente si hace falta */
-  gap: 300px;              /* Espacio entre botones */
+  justify-content: center;
+  align-items: center;
+  gap: 300px;
   margin-top: 20px;
 }
 
@@ -296,6 +280,7 @@ button:hover {
   background-color: #ddd;
   color: #333;
 }
+
 .prev-button:hover {
   background-color: #bbb;
 }
@@ -397,84 +382,73 @@ input {
 }
 
 @media (max-width: 450px) {
-  /* Reducimos un poco el tamaño general del texto */
   body {
     font-size: 0.9em;
   }
 
-  /* Contenedor principal: menos margen arriba/abajo */
   .container {
-    max-width: 90%;      /* Para que se adapte mejor al ancho del móvil */
+    max-width: 90%;
     margin: 40px auto 30px auto;
     padding: 10px;
   }
 
-  /* Título algo más pequeño */
   h1 {
-    font-size: 1.6em;    /* En lugar de 2.2em */
+    font-size: 1.6em;
     margin-bottom: 15px;
   }
 
-  /* Botones: padding y fuente un poco más reducidos */
   button {
     padding: 8px 15px;
-    font-size: 0.9em;  
+    font-size: 0.9em;
     margin: 8px 0;
   }
+
   .icon-plus {
-    font-size: 1em;      /* Ícono + algo más reducido */
+    font-size: 1em;
     margin-right: 6px;
   }
 
-  /* Menú principal: menos padding, ícono más pequeño */
   .main-menu {
     padding: 5px 10px;
   }
+
   .home-icon {
     width: 30px;
     height: 30px;
     margin-right: 5px;
   }
 
-  /* Wizard: contenido más compacto */
   .wizard-content {
-    padding: 20px;       /* En lugar de 30px */
-    max-width: 90%;      /* Ajustamos el ancho para pantallas muy pequeñas */
+    padding: 20px;
+    max-width: 90%;
   }
 
-  /* Botón de cierre (X) un poco más chico */
   .close-button {
-    top: 0;              /* Ajusta si se descuadra la posición */
+    top: 0;
     right: 5px;
     font-size: 1.2em;
   }
 
-  /* Cabecera de pasos: opcionalmente podemos reducir el size de los círculos */
   .step-circle {
     width: 35px;
     height: 35px;
     font-size: 0.9em;
   }
 
-  /* Inputs: padding y márgenes un poco menores */
   .step input {
     padding: 8px;
     margin-bottom: 10px;
     margin-top: 20px;
   }
 
-  /* Botones del wizard: reducir el gap para que quepan bien en móviles */
   .wizard-buttons {
-    gap: 20px;           /* Antes ponías 300px; aquí quedaría mucho más pequeño */
+    gap: 20px;
     margin-top: 15px;
   }
 
-  /* Tablas: celdas más compactas */
   #items-table th, #items-table td,
   #completed-table th, #completed-table td {
-    padding: 10px;       /* En lugar de 15px */
+    padding: 10px;
     font-size: 0.89em;
-
   }
 }
-

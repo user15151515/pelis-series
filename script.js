@@ -33,6 +33,12 @@ const step2 = document.getElementById('step2');
 const step3 = document.getElementById('step3');
 const currentStep = document.getElementById('current-step');
 
+// Sección completadas
+const showCompletedButton = document.getElementById('showCompleted');
+const completedSection = document.getElementById('completed-section');
+const completedTable = document.getElementById('completed-table').querySelector('tbody');
+const completedThead = document.querySelector('#completed-table thead');
+
 // Mostrar el wizard
 addBtn.addEventListener('click', () => {
   wizard.classList.remove('hidden');
@@ -124,14 +130,25 @@ wizardForm.addEventListener('submit', (e) => {
   document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
 });
 
-// Fetch de datos en tiempo real
+/* 
+  SUSCRIPCIÓN EN TIEMPO REAL
+  - Reconstruye la lista principal (no completadas)
+  - Reconstruye la lista de completadas
+*/
 firebase.database().ref('pelis-series').on('value', (snapshot) => {
+  // 1. LIMPIAR TABLA DE NO COMPLETADAS
   itemsList.innerHTML = '';
 
+  // 2. LIMPIAR TABLA DE COMPLETADAS
+  completedTable.innerHTML = '';
+  let completedCount = 0;
+
+  // 3. RECORRER TODOS LOS ELEMENTOS
   snapshot.forEach(item => {
     const data = item.val();
     const key = item.key;
 
+    // 3a. SI NO ESTÁ COMPLETADA => TABLA PRINCIPAL
     if (!data.completed) {
       const row = document.createElement('tr');
       row.innerHTML = `
@@ -154,10 +171,56 @@ firebase.database().ref('pelis-series').on('value', (snapshot) => {
       itemsList.appendChild(row);
 
       // Eventos de borrar y completar
-      row.querySelector('.delete-button').addEventListener('click', (e) => handleDelete(key, row));
-      row.querySelector('.complete-button').addEventListener('click', (e) => handleComplete(key, row));
+      row.querySelector('.delete-button').addEventListener('click', () => handleDelete(key, row));
+      row.querySelector('.complete-button').addEventListener('click', () => handleComplete(key, row));
+    } 
+    // 3b. SI ESTÁ COMPLETADA => TABLA DE COMPLETADAS
+    else {
+      completedCount++;
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${data.name}</td>
+        <td>${data.platform}</td>
+        <td>${data.duration}</td>
+        <td>
+          <button class="delete-completed" data-id="${key}" title="Eliminar definitivamente">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"/>
+            </svg>
+          </button>
+        </td>
+      `;
+      completedTable.appendChild(row);
+
+      // Evento para eliminar definitivamente
+      row.querySelector('.delete-completed').addEventListener('click', (e) => {
+        if (confirm("¿Eliminar esta película/serie definitivamente?")) {
+          firebase.database().ref(`pelis-series/${key}`).remove();
+        }
+      });
     }
   });
+
+  // 4. MOSTRAR U OCULTAR THEAD Y MENSAJE "NO HAY"
+  //    (SI ESTÁ VACÍA LA LISTA DE COMPLETADAS)
+  const oldMsg = document.getElementById('noCompletedMsg');
+  if (oldMsg) oldMsg.remove(); // Quitar mensaje anterior, si existía
+
+  if (completedCount === 0) {
+    // Ocultar thead
+    completedThead.style.display = 'none';
+
+    // Añadir mensaje "No hi ha películes vistes"
+    const noItemsMsg = document.createElement('p');
+    noItemsMsg.id = 'noCompletedMsg';
+    noItemsMsg.textContent = 'No hi ha películes vistes';
+    noItemsMsg.style.marginTop = '10px';
+    noItemsMsg.style.color = '#666';
+    completedSection.appendChild(noItemsMsg);
+  } else {
+    // Mostrar thead
+    completedThead.style.display = 'table-header-group';
+  }
 });
 
 // Manejar borrado
@@ -187,54 +250,13 @@ function handleComplete(id, row) {
   }
 }
 
-// Mostrar/ocultar completadas
-const showCompletedButton = document.getElementById('showCompleted');
-const completedSection = document.getElementById('completed-section');
-const completedTable = document.getElementById('completed-table').querySelector('tbody');
-
+// Mostrar/ocultar completadas (solo alterna la visibilidad)
+const closeWizard = document.getElementById('closeWizard');
 showCompletedButton.addEventListener('click', () => {
   completedSection.classList.toggle('hidden');
-  if (!completedSection.classList.contains('hidden')) {
-    // Cargar completadas
-    firebase.database().ref('pelis-series').once('value', (snapshot) => {
-      completedTable.innerHTML = '';
-      snapshot.forEach(item => {
-        const data = item.val();
-        const key = item.key;
-        if (data.completed) {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${data.name}</td>
-            <td>${data.platform}</td>
-            <td>${data.duration}</td>
-            <td>
-              <button class="delete-completed" data-id="${key}" title="Eliminar definitivamente">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"/>
-                </svg>
-              </button>
-            </td>
-          `;
-          completedTable.appendChild(row);
-
-          // Evento para eliminar definitivamente
-          row.querySelector('.delete-completed').addEventListener('click', (e) => {
-            const id = e.currentTarget.getAttribute('data-id');
-            if (confirm("¿Eliminar esta película/serie definitivamente?")) {
-              firebase.database().ref(`pelis-series/${id}`).remove()
-                .then(() => {
-                  row.remove();
-                });
-            }
-          });
-        }
-      });
-    });
-  }
 });
 
 // Cerrar wizard con el botón X
-const closeWizard = document.getElementById('closeWizard');
 closeWizard.addEventListener('click', () => {
   wizard.classList.add('hidden');
   document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
