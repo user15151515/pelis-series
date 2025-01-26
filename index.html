@@ -1,98 +1,66 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ca"></html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>‎</title>
   <link rel="icon" href="imagenes/logo.ico" type="image/x-icon">   
-  <!-- Fuente opcional para un estilo moderno -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Menú de navegación -->
+  <!-- Menú de navegació -->
   <nav class="main-menu">
     <div class="menu-content">
       <a href="https://user15151515.github.io/jjjj/" class="menu-item">
-        <img src="imagenes/casa.png" alt="Inicio" class="home-icon">
+        <img src="imagenes/casa.png" alt="Inici" class="home-icon">
       </a>
     </div>
   </nav>
 
   <div class="container">
-    <h1>Pelis/Series</h1>
-    <!-- Botón de añadir con icono (opcional) -->
+    <h1>Pelis/Sèries</h1>
+    <!-- Botó d'afegir amb icona (opcional) -->
     <button id="addBtn">
-      <span class="icon-plus">+</span> Afegir Peli/Serie
+      <span class="icon-plus">+</span> Afegir Peli/Sèrie
     </button>
 
-<!-- Wizard multi-paso -->
-<div id="wizard" class="hidden">
-  <div class="wizard-overlay"></div>
-  <form id="wizardForm" class="wizard-content">
-    
-    <!-- Botón de cierre (X) -->
-    <button type="button" id="closeWizard" class="close-button">&times;</button>
-    
-    <!-- Encabezado gráfico de pasos -->
-    <div class="wizard-header">
-      <ul class="wizard-steps">
-        <li class="wizard-step active" data-step="1" id="wizardStep1">
-          <div class="step-circle">1</div>
-          <div class="step-label">Nombre</div>
-        </li>
-        <li class="wizard-step" data-step="2" id="wizardStep2">
-          <div class="step-circle">2</div>
-          <div class="step-label">Plataforma</div>
-        </li>
-        <li class="wizard-step" data-step="3" id="wizardStep3">
-          <div class="step-circle">3</div>
-          <div class="step-label">Duración</div>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Contenedor de pasos -->
-    <div class="step-wrapper">
-      <!-- Paso 1 -->
-      <div class="step" id="step1">
-        <input type="text" id="name" placeholder="Introduce el nombre" required>
-        <div class="wizard-buttons">
-          <button type="button" id="next1">Siguiente</button>
-        </div>
-      </div>
-
-      <!-- Paso 2 -->
-      <div class="step hidden" id="step2">
-        <input type="text" id="platform" placeholder="Introduce la plataforma" required>
-        <div class="wizard-buttons">
-          <button type="button" id="prev2" class="prev-button">Anterior</button>
-          <button type="button" id="next2">Siguiente</button>
-        </div>
-      </div>
-
-      <!-- Paso 3 -->
-      <div class="step hidden" id="step3">
-          <input type="text" id="duration" placeholder="Introduce la duración" required>
-        <div class="wizard-buttons">
-          <button type="button" id="prev3" class="prev-button">Anterior</button>
-          <button type="submit">Guardar</button>
-        </div>
-      </div>
-    </div>
-  </form>
+<!-- Nou Wizard Multi-Pas Adaptat -->
+<div id="wizard" class="wizard hidden">
+  <button class="close-wizard" id="close-wizard">&times;</button>
+  
+  <!-- Pas 1: Nom -->
+  <div id="step-name" class="step">
+    <h2>Nom</h2>
+    <input type="text" id="wizard-name" placeholder="Nom de la pel·lícula/sèrie" />
+    <button class="next-button" data-next="step-platform">Següent</button>
+  </div>
+  
+  <!-- Pas 2: Plataforma -->
+  <div id="step-platform" class="step hidden">
+    <h2>Plataforma</h2>
+    <input type="text" id="wizard-platform" placeholder="Netflix, Prime, HBO" />
+    <button class="next-button" data-next="step-duration">Següent</button>
+  </div>
+  
+  <!-- Pas 3: Duració -->
+  <div id="step-duration" class="step hidden">
+    <h2>Duració</h2>
+    <input type="text" id="wizard-duration" placeholder="Duració (2h30m, 2 temp)" />
+    <button id="add-item-button" class="primary-button" type="button">Guardar</button>
+  </div>
 </div>
 
 
-    <!-- Lista de Pelis/Series -->
+    <!-- Llista de Pelis/Sèries -->
     <div id="list">
       <table id="items-table">
         <thead>
           <tr>
-             <th class="titulo">Nombre</th>
+             <th class="titulo">Nom</th>
              <th class="titulo">Plataforma</th>
-             <th class="titulo">Duración</th>
+             <th class="titulo">Duració</th>
              <th class="titulo"></th>
           </tr>
        </thead>
@@ -100,8 +68,8 @@
       </table>
     </div>
     
-    <!-- Sección de completadas -->
-    <button id="showCompleted">Películas/Series Vistas</button>
+    <!-- Secció de completades -->
+    <button id="showCompleted">Pel·lícules/Sèries Vistes</button>
 
     <div id="completed-section" class="hidden">
       <table id="completed-table">
@@ -117,7 +85,7 @@
       </table>
     </div>
     
-    <!-- Botón para mostrar las completadas -->
+    <!-- Botó per mostrar les completades -->
     
   </div>
 
@@ -125,7 +93,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
 
-  <!-- Archivo de JS principal -->
+  <!-- Arxiu de JS principal -->
   <script src="script.js"></script>
   
 </body>

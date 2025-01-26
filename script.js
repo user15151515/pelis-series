@@ -16,22 +16,11 @@ const db = firebase.database();
 // Elementos del DOM
 const addBtn = document.getElementById('addBtn');
 const wizard = document.getElementById('wizard');
-const wizardForm = document.getElementById('wizardForm');
-const nameInput = document.getElementById('name');
-const platformInput = document.getElementById('platform');
-const durationInput = document.getElementById('duration');
-const itemsList = document.getElementById('items');
-
-// Botones wizard
-const next1 = document.getElementById('next1');
-const next2 = document.getElementById('next2');
-const prev2 = document.getElementById('prev2');
-const prev3 = document.getElementById('prev3');
-
-const step1 = document.getElementById('step1');
-const step2 = document.getElementById('step2');
-const step3 = document.getElementById('step3');
-const currentStep = document.getElementById('current-step');
+const closeWizardButton = document.getElementById('close-wizard');
+const wizardNameInput = document.getElementById('wizard-name');
+const wizardPlatformInput = document.getElementById('wizard-platform');
+const wizardDurationInput = document.getElementById('wizard-duration');
+const addItemButton = document.getElementById('add-item-button');
 
 // Sección completadas
 const showCompletedButton = document.getElementById('showCompleted');
@@ -39,95 +28,111 @@ const completedSection = document.getElementById('completed-section');
 const completedTable = document.getElementById('completed-table').querySelector('tbody');
 const completedThead = document.querySelector('#completed-table thead');
 
-// Mostrar el wizard
+// Lista de Pelis/Series
+const itemsList = document.getElementById('items');
+
+// Variable para rastrear el paso actual
+let currentStep = 1;
+
+// Mostrar el wizard al hacer clic en 'Afegir Peli/Serie'
 addBtn.addEventListener('click', () => {
   wizard.classList.remove('hidden');
+  wizard.classList.add('visible');
   showStep(1); // Muestra el paso 1
 });
 
 // Al cargar la página, ocultamos todo
 window.addEventListener('DOMContentLoaded', () => {
   wizard.classList.add('hidden');
+  wizard.classList.remove('visible');
   document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
 });
 
+// Función para mostrar pasos
 function showStep(n) {
-  // Ocultar todos los div.step
+  // Ocultar todos los pasos
   document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
   
-  // Remover activo/completado de todos los li.wizard-step
-  document.querySelectorAll('.wizard-step').forEach(s => {
-    s.classList.remove('active');
-    s.classList.remove('completed');
-  });
-  
-  // Mostrar el div.step correspondiente
-  switch(n) {
-    case 1:
-      document.getElementById('step1').classList.remove('hidden');
-      // Marcar el step 1 como activo
-      document.querySelector('#wizardStep1').classList.add('active');
-      break;
-    case 2:
-      document.getElementById('step2').classList.remove('hidden');
-      // Marcar step 1 como completado
-      document.querySelector('#wizardStep1').classList.add('completed');
-      // Marcar step 2 como activo
-      document.querySelector('#wizardStep2').classList.add('active');
-      break;
-    case 3:
-      document.getElementById('step3').classList.remove('hidden');
-      // Marcar steps 1 y 2 como completados
-      document.querySelector('#wizardStep1').classList.add('completed');
-      document.querySelector('#wizardStep2').classList.add('completed');
-      // Marcar step 3 como activo
-      document.querySelector('#wizardStep3').classList.add('active');
-      break;
+  // Mostrar el paso correspondiente
+  const stepToShow = document.getElementById(n === 1 ? 'step-name' : n === 2 ? 'step-platform' : 'step-duration');
+  if (stepToShow) {
+    stepToShow.classList.remove('hidden');
+    currentStep = n;
   }
 }
 
-// Pasar de paso 1 a 2
-next1.addEventListener('click', () => {
-  // Validación mínima
-  if (!nameInput.value.trim()) {
-    alert("Por favor, introduce un nombre.");
-    return;
-  }
-  showStep(2);
-});
-
-// Pasar de paso 2 a 3
-next2.addEventListener('click', () => {
-  if (!platformInput.value.trim()) {
-    alert("Por favor, introduce una plataforma.");
-    return;
-  }
-  showStep(3);
-});
-
-// Botones de retroceso
-prev2.addEventListener('click', () => showStep(1));
-prev3.addEventListener('click', () => showStep(2));
-
-// Al enviar el formulario (paso 3)
-wizardForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  if (!durationInput.value.trim()) {
-    alert("Por favor, introduce la duración.");
-    return;
-  }
-
-  // Guardar en Firebase
-  const name = nameInput.value.trim();
-  const platform = platformInput.value.trim();
-  const duration = durationInput.value.trim();
-
-  firebase.database().ref('pelis-series').push({ name, platform, duration });
-  
-  // Reseteo y cierre
-  wizardForm.reset();
+// Cerrar el wizard con el botón X
+closeWizardButton.addEventListener('click', () => {
   wizard.classList.add('hidden');
+  wizard.classList.remove('visible');
   document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
+});
+
+// Cerrar el wizard con la tecla ESC
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && wizard.classList.contains('visible')) {
+    wizard.classList.add('hidden');
+    wizard.classList.remove('visible');
+    document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
+  }
+});
+
+// Avanzar de paso 1 a 2
+const nextPlatformButton = document.querySelector('.next-button[data-next="step-platform"]');
+if (nextPlatformButton) {
+  nextPlatformButton.addEventListener('click', () => {
+    if (!wizardNameInput.value.trim()) {
+      alert("Si us plau, introdueix el nom de la pel·lícula/sèrie.");
+      return;
+    }
+    showStep(2);
+  });
+}
+
+// Avanzar de paso 2 a 3
+const nextDurationButton = document.querySelector('.next-button[data-next="step-duration"]');
+if (nextDurationButton) {
+  nextDurationButton.addEventListener('click', () => {
+    if (!wizardPlatformInput.value.trim()) {
+      alert("Si us plau, introdueix la plataforma.");
+      return;
+    }
+    showStep(3);
+  });
+}
+
+// Al hacer clic en 'Guardar'
+addItemButton.addEventListener('click', async () => {
+  const name = wizardNameInput.value.trim();
+  const platform = wizardPlatformInput.value.trim();
+  const duration = wizardDurationInput.value.trim();
+  
+  if (!name || !platform || !duration) {
+    alert("Si us plau, completa tots els camps.");
+    return;
+  }
+
+  try {
+    // Agregar a Firebase Database
+    const newItemRef = db.ref('pelis-series').push();
+    await newItemRef.set({ 
+      name, 
+      platform, 
+      duration, 
+      completed: false 
+    });
+    
+    // Reseteo y cierre wizard
+    wizardNameInput.value = '';
+    wizardPlatformInput.value = '';
+    wizardDurationInput.value = '';
+    wizard.classList.add('hidden');
+    wizard.classList.remove('visible');
+    document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
+  } catch (error) {
+    console.error("Error al agregar la película/serie:", error);
+    alert("Hi ha hagut un error en afegir la pel·lícula/sèrie. Torna-ho a intentar.");
+  }
 });
 
 /* 
@@ -156,12 +161,12 @@ firebase.database().ref('pelis-series').on('value', (snapshot) => {
         <td class="editable-platform">${data.platform}</td>
         <td class="editable-duration">${data.duration}</td>
         <td>
-          <button class="delete-button" data-id="${key}" title="Borrar">
+          <button class="delete-button" data-id="${key}" title="Esborrar">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"/>
             </svg>
           </button>
-          <button class="complete-button" data-id="${key}" title="Marcar como visto">
+          <button class="complete-button" data-id="${key}" title="Marcar com a vist">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 21 7l-1.4-1.4z"/>
             </svg>
@@ -171,8 +176,14 @@ firebase.database().ref('pelis-series').on('value', (snapshot) => {
       itemsList.appendChild(row);
 
       // Eventos de borrar y completar
-      row.querySelector('.delete-button').addEventListener('click', () => handleDelete(key, row));
-      row.querySelector('.complete-button').addEventListener('click', () => handleComplete(key, row));
+      const deleteButton = row.querySelector('.delete-button');
+      const completeButton = row.querySelector('.complete-button');
+      if (deleteButton) {
+        deleteButton.addEventListener('click', () => handleDelete(key, row));
+      }
+      if (completeButton) {
+        completeButton.addEventListener('click', () => handleComplete(key, row));
+      }
     } 
     // 3b. SI ESTÁ COMPLETADA => TABLA DE COMPLETADAS
     else {
@@ -183,7 +194,7 @@ firebase.database().ref('pelis-series').on('value', (snapshot) => {
         <td>${data.platform}</td>
         <td>${data.duration}</td>
         <td>
-          <button class="delete-completed" data-id="${key}" title="Eliminar definitivamente">
+          <button class="delete-completed" data-id="${key}" title="Eliminar definitivament">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M3 6h18v2H3zm3 3h12v12H6zm5-5h2v3h-2z"/>
             </svg>
@@ -193,16 +204,18 @@ firebase.database().ref('pelis-series').on('value', (snapshot) => {
       completedTable.appendChild(row);
 
       // Evento para eliminar definitivamente
-      row.querySelector('.delete-completed').addEventListener('click', (e) => {
-        if (confirm("¿Eliminar esta película/serie definitivamente?")) {
-          firebase.database().ref(`pelis-series/${key}`).remove();
-        }
-      });
+      const deleteCompletedButton = row.querySelector('.delete-completed');
+      if (deleteCompletedButton) {
+        deleteCompletedButton.addEventListener('click', () => {
+          if (confirm("Eliminar aquesta pel·lícula/sèrie definitivament?")) {
+            firebase.database().ref(`pelis-series/${key}`).remove();
+          }
+        });
+      }
     }
   });
 
   // 4. MOSTRAR U OCULTAR THEAD Y MENSAJE "NO HAY"
-  //    (SI ESTÁ VACÍA LA LISTA DE COMPLETADAS)
   const oldMsg = document.getElementById('noCompletedMsg');
   if (oldMsg) oldMsg.remove(); // Quitar mensaje anterior, si existía
 
@@ -225,47 +238,33 @@ firebase.database().ref('pelis-series').on('value', (snapshot) => {
 
 // Manejar borrado
 function handleDelete(id, row) {
-  if (confirm("¿Estás seguro de que quieres borrar esta película/serie?")) {
-    row.remove(); 
+  if (confirm("Estàs segur que vols esborrar aquesta pel·lícula/sèrie?")) {
     firebase.database().ref(`pelis-series/${id}`).remove()
       .then(() => {
-        console.log("Elemento eliminado correctamente.");
+        row.remove(); 
+        console.log("Element eliminat correctament.");
       })
       .catch((error) => {
-        console.error("Error al eliminar el elemento:", error);
+        console.error("Error en eliminar l'element:", error);
       });
   }
 }
 
 // Manejar completar
 function handleComplete(id, row) {
-  if (confirm("¿Marcar como visto?")) {
+  if (confirm("Marcar com a vist?")) {
     firebase.database().ref(`pelis-series/${id}`).update({ completed: true })
       .then(() => {
-        console.log("Marcado como completado.");
+        row.remove();
+        console.log("Marcat com a completat.");
       })
       .catch((error) => {
-        console.error("Error al marcar como completado:", error);
+        console.error("Error en marcar com a completat:", error);
       });
   }
 }
 
 // Mostrar/ocultar completadas (solo alterna la visibilidad)
-const closeWizard = document.getElementById('closeWizard');
 showCompletedButton.addEventListener('click', () => {
   completedSection.classList.toggle('hidden');
-});
-
-// Cerrar wizard con el botón X
-closeWizard.addEventListener('click', () => {
-  wizard.classList.add('hidden');
-  document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
-});
-
-// Cerrar wizard con ESC
-window.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    wizard.classList.add('hidden');
-    document.querySelectorAll('.step').forEach(step => step.classList.add('hidden'));
-  }
 });
